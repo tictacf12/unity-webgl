@@ -1,0 +1,36 @@
+{
+  "name": "unity-webgl",
+  "version": "0.0.1",
+  "description": "Unity webgl player webcomponent",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tictacf12/unity-webgl.git"
+  },
+  "main": "unity-webgl.js",
+  "module": "unity-webgl.js",
+  "scripts": {
+    "start": "yarn run dev",
+    "dev": "concurrently --kill-others \"yarn run watch\" \"yarn run serve\"",
+    "watch": "gulp watch --gulpfile=gulpfile.cjs",
+    "serve": "es-dev-server -c ./es-dev-server.config.js"
+  },
+  "author": {
+    "name": "tictacf12"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@webcomponents/webcomponentsjs": "2.5.0",
+    "concurrently": "5.3.0",
+    "es-dev-server": "1.57.4",
+    "gulp": "4.0.2",
+    "wct-browser-legacy": "1.0.2"
+  },
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "web-components",
+    "html"
+  ]
+}
