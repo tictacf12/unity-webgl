@@ -2,35 +2,23 @@
 
 class UnityWebGL extends HTMLElement {
 
-
     static get tag() {
         return "unity-webgl";
     }
 
     constructor() {
         super();
+        this.target = this.getAttribute('target');
+        this.compression = this.getAttribute('compression');
+        this.streaming_url = this.getAttribute('streaming_url');
+        this.company_name = this.getAttribute('company_name');
+        this.product_name = this.getAttribute('product_name');
+        this.product_version = this.getAttribute('product_version');
+        this.width = this.getAttribute('width');
+        this.height = this.getAttribute('height');
+        this.background = this.getAttribute('background');
         this.template = document.createElement("template");
         this.attachShadow({ mode: "open" });
-        this.render();
-        this.observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                this.target = this.getAttribute('target');
-                this.compression = this.getAttribute('compression');
-                this.streaming_url = this.getAttribute('streaming_url');
-                this.company_name = this.getAttribute('company_name');
-                this.product_name = this.getAttribute('product_name');
-                this.product_version = this.getAttribute('product_version');
-                this.width = this.getAttribute('width');
-                this.height = this.getAttribute('height');
-                this.background = this.getAttribute('background');
-            });
-        });
-        this.observer.observe(this, {
-            characterData: true,
-            attributes: false,
-            childList: false,
-            subtree: true,
-        });
     }
 
     get html() {
@@ -43,15 +31,6 @@ class UnityWebGL extends HTMLElement {
         if (window.ShadyCSS) {
             window.ShadyCSS.styleElement(this);
         }
-        this.target = this.getAttribute('target');
-        this.compression = this.getAttribute('compression');
-        this.streaming_url = this.getAttribute('streaming_url');
-        this.company_name = this.getAttribute('company_name');
-        this.product_name = this.getAttribute('product_name');
-        this.product_version = this.getAttribute('product_version');
-        this.width = this.getAttribute('width');
-        this.height = this.getAttribute('height');
-        this.background = this.getAttribute('background');
     }
 
     render() {
@@ -63,7 +42,7 @@ class UnityWebGL extends HTMLElement {
         }
         this.shadowRoot.appendChild(this.template.content.cloneNode(true));
         var script = document.createElement('script');
-        const parent = this;
+        var parent = this;
         script.onload = function () {
             //do stuff with the script
             createUnityInstance(parent.shadowRoot.querySelector("canvas"), {
@@ -81,13 +60,22 @@ class UnityWebGL extends HTMLElement {
         script.onerror = function () {
             alert("Error loading " + this.src); // Error loading https://example.com/404.js
         };
-        
     }
 
     static get observedAttributes() {
         return ["target", "compression",
             "streaming_url", "company_name", "product_name", "product_version",
             "width", "height", "background"];
+    }
+
+    attributeChangedCallback(attr, oldValue, newValue) {
+        if (this.shadowRoot && newValue && oldValue != newValue) {
+            clearTimeout(this._debounce);
+            var parent = this;
+            this._debounce = setTimeout(function() {
+                parent.render();                
+            }, 0);
+        }
     }
 
     set target(val) {
@@ -144,22 +132,6 @@ class UnityWebGL extends HTMLElement {
     }
     get background() {
         return this.getAttribute("background");
-    }
-
-    attributeChangedCallback(attr, oldValue, newValue) {
-        if (newValue && oldValue != newValue) {
-            this["is_" + attr + "_set"] = true;
-            if(this.isReadyToRender()){
-                this.render();
-            }
-            
-        }
-    }
-
-    isReadyToRender() {
-        return this.is_target_set && this.is_compression_set && this.is_streaming_url_set
-            && this.is_company_name_set && this.is_product_name_set && this.is_product_version_set
-            && this.is_width_set && this.is_height_set && this.is_background_set;
     }
 }
 
