@@ -58,7 +58,7 @@ class UnityWebGL extends HTMLElement {
         script.src = this.target + ".loader.js";
         this.shadowRoot.appendChild(script);
         script.onerror = function () {
-            alert("Error loading " + this.src); // Error loading https://example.com/404.js
+            console.log("Error loading " + this.src);
         };
     }
 
@@ -132,6 +132,104 @@ class UnityWebGL extends HTMLElement {
     }
     get background() {
         return this.getAttribute("background");
+    }
+
+    static get haxProperties() {
+        return {
+            canScale: false,
+            canPosition: true,
+            canEditSource: true,
+            gizmo: {
+                title: "Unity Player",
+                description: "Unity WebGL Player",
+                icon: "av:play-circle-filled",
+                color: "purple",
+                groups: [],
+                handles: [],
+                meta: {
+                    author: "Brainmedia",
+                },
+            },
+            settings: {
+                configure: [
+                    {
+                        property: "target",
+                        title: "Target",
+                        description: "Target game path",
+                        inputMethod: "textfield",
+                    },
+                    {
+                        property: "compression",
+                        title: "Compression method",
+                        description: "Game's files extention",
+                        inputMethod: "textfield",
+                    },
+                    {
+                        property: "streaming_url",
+                        title: "Streaming url",
+                        description: "Streaming assets url",
+                        inputMethod: "textfield",
+                    },
+                    {
+                        property: "company_name",
+                        title: "Company Name",
+                        description: "Company Name",
+                        inputMethod: "textfield",
+                    },
+                    {
+                        property: "product_name",
+                        title: "Product Name",
+                        description: "Game title",
+                        inputMethod: "textfield",
+                    },
+                    {
+                        property: "product_version",
+                        title: "Product Version",
+                        description: "Release Version",
+                        inputMethod: "textfield",
+                    },
+                    {
+                        property: "width",
+                        title: "Canvas Width",
+                        description: "Canvas CSS Width (with px/em/etc.)",
+                        inputMethod: "textfield",
+                    },
+                    {
+                        property: "height",
+                        title: "Canvas Height",
+                        description: "Canvas CSS Height (with px/em/etc.)",
+                        inputMethod: "textfield",
+                    },
+                    {
+                        property: "background",
+                        title: "Canvas Background",
+                        description: "Canvas CSS Background",
+                        inputMethod: "textfield",
+                    },
+                ],
+                advanced: [],
+            },
+            saveOptions: {
+                unsetAttributes: [],
+            },
+            demoSchema: [
+                {
+                  tag: "unity-webgl",
+                  content: "",
+                  properties: {
+                    target: "demo/Build/build web",
+                    compression: "unityweb",
+                    streaming_url: "StreamingAssets",
+                    company_name: "DefaultCompany",
+                    product_name: "test webgl",
+                    product_version: "0.1",
+                    width: "460px",
+                    height: "400px",
+                    background: "#231F20",
+                  },
+                },
+              ],
+        };
     }
 }
 
